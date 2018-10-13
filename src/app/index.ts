@@ -188,21 +188,22 @@ module.exports = class extends Generator {
       throw new Error("Missing project properties");
     }
 
-    let bindingWrapperTarget = "lib/binding.js";
     const genTypeScript = (this.options as any).typescript;
     const genIntermediate = (this.options as any).intermediate;
 
-    let bindingWrapperSrc = (genIntermediate ?
-                                "lib/binding_intermediate.js" :
-                                bindingWrapperTarget);
-    if (genTypeScript) {
-      if (genIntermediate) {
-        bindingWrapperSrc = "lib/binding_intermediate.ts";
-      }
+    let bindingWrapperTarget = "lib/binding.js";
+    let bindingWrapperSrc = "lib/binding_intermediate.js";
 
+    if (genTypeScript) {
       bindingWrapperTarget = "lib/binding.ts";
+      bindingWrapperSrc = "lib/binding_intermediate.ts";
+
       this.props.bindingJsFile = "../dist/binding.js";
     }
+
+    bindingWrapperSrc = (genIntermediate ?
+                            bindingWrapperSrc :
+                            bindingWrapperTarget);
 
     const files = [
         ["binding.gyp"],
